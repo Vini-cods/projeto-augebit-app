@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 },
   menuButton: {
     padding: 5,
-    marginTop:50,
+    marginTop:70,
   },
   scrollView: {
     flex: 1,

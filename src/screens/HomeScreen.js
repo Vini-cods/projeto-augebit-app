@@ -139,14 +139,14 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#0A1628',
   },
   homeHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 35,
-    backgroundColor: '#000',
+    backgroundColor: '#0A1628',
   },
   smallLogo: {
     width: 120,

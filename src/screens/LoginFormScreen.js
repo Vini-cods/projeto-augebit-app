@@ -5,32 +5,32 @@ const LoginFormScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { type } = route.params || { type: 'pessoal' };
-  
+
   const handleLogin = () => {
     // Aqui você implementaria a lógica de autenticação
     if (email.trim() === '' || password.trim() === '') {
       alert('Por favor, preencha todos os campos');
       return;
     }
-    
+
     navigation.navigate('Home');
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.loginText}>Login</Text>
       </View>
-      
+
       <View style={styles.welcomeContainer}>
-        <Image 
-          source={require('../../assets/logo-small.png')} 
+        <Image
+          source={require('../../assets/logo-small.png')}
           style={styles.smallLogo}
           resizeMode="contain"
         />
         <Text style={styles.welcomeText}>Bem-vindo(a)</Text>
       </View>
-      
+
       <View style={styles.formContainer}>
         <Text style={styles.inputLabel}>E-mail</Text>
         <TextInput
@@ -42,7 +42,7 @@ const LoginFormScreen = ({ navigation, route }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        
+
         <Text style={styles.inputLabel}>Sua senha</Text>
         <TextInput
           style={styles.input}
@@ -52,11 +52,11 @@ const LoginFormScreen = ({ navigation, route }) => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        
+
         <TouchableOpacity style={styles.accessButton} onPress={handleLogin}>
           <Text style={styles.accessButtonText}>Acessar</Text>
         </TouchableOpacity>
-        
+
         <View style={styles.footerLinks}>
           <Text style={styles.forgotPasswordText}>
             Não possui uma conta? <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>Cadastre-se</Text>

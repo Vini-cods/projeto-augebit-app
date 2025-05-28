@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import CourseDetailScreen from '../screens/CourseDetailScreen';
 import CursosPresenciaisScreen from '../screens/CursosPresenciaisScreen';
 import InstructorsScreen from '../screens/InstructorsScreen';
+import InstructorProfileScreen from '../screens/InstructorProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 // Components
@@ -24,27 +25,22 @@ const HomeStack = () => {
   );
 };
 
-const CoursesStack = () => {
+// ATUALIZADO - Adicionada navegação para CourseDetailScreen
+const CursosPresenciaisStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="CoursesMain" component={CoursesScreen} />
+      <Stack.Screen name="CursosPresenciaisMain" component={CursosPresenciaisScreen} />
       <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
     </Stack.Navigator>
   );
 };
 
-const CursosPresenciaisStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="CursosPresenciaisMain" component={CursosPresenciaisScreen} />
-    </Stack.Navigator>
-  );
-};
-
+// Stack Navigator para Instrutores
 const InstructorsStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="InstructorsMain" component={InstructorsScreen} />
+      <Stack.Screen name="InstructorProfile" component={InstructorProfileScreen} />
     </Stack.Navigator>
   );
 };
