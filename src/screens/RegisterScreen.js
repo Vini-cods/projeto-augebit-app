@@ -24,9 +24,6 @@ const RegisterScreen = ({ navigation }) => {
   
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.loginText}>Cadastro</Text>
-      </View>
       
       <View style={styles.welcomeContainer}>
         <Image 
@@ -34,7 +31,7 @@ const RegisterScreen = ({ navigation }) => {
           style={styles.smallLogo}
           resizeMode="contain"
         />
-        <Text style={styles.welcomeText}>Cadastra-se</Text>
+        <Text style={styles.welcomeText}>Sign up</Text>
       </View>
       
       <View style={styles.formContainer}>
@@ -42,7 +39,7 @@ const RegisterScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Digite um email..."
-          placeholderTextColor="#7A869A"
+          placeholderTextColor="#000"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -53,7 +50,7 @@ const RegisterScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Sua senha"
-          placeholderTextColor="#7A869A"
+          placeholderTextColor="#000"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -63,7 +60,7 @@ const RegisterScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Confirme sua senha"
-          placeholderTextColor="#7A869A"
+          placeholderTextColor="#000"
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
@@ -103,13 +100,19 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   smallLogo: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
+    marginTop: 25,
+    right: 25,
+
   },
+  
   welcomeText: {
     color: '#2E90FA',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: '500',
+    marginTop: 25,
+    right: 40,
   },
   formContainer: {
     padding: 20,

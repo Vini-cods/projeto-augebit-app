@@ -36,7 +36,7 @@ const LoginFormScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.input}
           placeholder="Digite um email..."
-          placeholderTextColor="#7A869A"
+          placeholderTextColor="#000"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -47,7 +47,7 @@ const LoginFormScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.input}
           placeholder="Sua senha"
-          placeholderTextColor="#7A869A"
+          placeholderTextColor="#000"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -75,14 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#091836',
   },
-  header: {
-    padding: 15,
-    backgroundColor: '#f0f0f0',
-  },
-  loginText: {
-    color: '#777',
-    fontSize: 16,
-  },
+  
   welcomeContainer: {
     flexDirection: 'row',
     alignItems: 'center',

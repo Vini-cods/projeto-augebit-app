@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#1E3A70',
+    borderBottomColor: '#2E90FA',
   },
   tab: {
     flex: 1,

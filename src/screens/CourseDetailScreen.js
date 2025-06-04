@@ -70,19 +70,19 @@ const CourseDetailScreen = () => {
           {/* Quick Info Cards */}
           <View style={styles.quickInfoContainer}>
             <View style={styles.infoCard}>
-              <Ionicons name="time-outline" size={20} color="#4A90E2" />
+              <Ionicons name="time-outline" size={20} color="#2E90FA" />
               <Text style={styles.infoText}>{curso.cargaHoraria}</Text>
             </View>
             <View style={styles.infoCard}>
-              <Ionicons name="calendar-outline" size={20} color="#4A90E2" />
+              <Ionicons name="calendar-outline" size={20} color="#2E90FA" />
               <Text style={styles.infoText}>{curso.duracao}</Text>
             </View>
             <View style={styles.infoCard}>
-              <Ionicons name="location-outline" size={20} color="#4A90E2" />
+              <Ionicons name="location-outline" size={20} color="#2E90FA" />
               <Text style={styles.infoText}>{curso.modalidade}</Text>
             </View>
             <View style={styles.infoCard}>
-              <Ionicons name="medal-outline" size={20} color="#4A90E2" />
+              <Ionicons name="medal-outline" size={20} color="#2E90FA" />
               <Text style={styles.infoText}>{curso.nivel}</Text>
             </View>
           </View>
@@ -119,7 +119,7 @@ const CourseDetailScreen = () => {
             <Text style={styles.sectionTitle}>Requisitos</Text>
             {curso.requisitos.map((req, index) => (
               <View key={index} style={styles.listItem}>
-                <Ionicons name="checkmark-circle-outline" size={16} color="#4A90E2" />
+                <Ionicons name="checkmark-circle-outline" size={16} color="#2E90FA" />
                 <Text style={styles.listText}>{req}</Text>
               </View>
             ))}
@@ -156,7 +156,7 @@ const CourseDetailScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <Ionicons name="school-outline" size={40} color="#4A90E2" />
+              <Ionicons name="school-outline" size={40} color="#2E90FA" />
               <Text style={styles.modalTitle}>Confirmar Inscrição</Text>
             </View>
             
@@ -203,6 +203,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     paddingTop: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E293B',
   },
   backButton: {
     padding: 8,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#2E90FA',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -252,7 +254,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   instructor: {
-    color: '#7A8B9A',
+    color: '#94A3B8',
     fontSize: 16,
     marginBottom: 20,
   },
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   infoCard: {
-    backgroundColor: '#1E3A5F',
+    backgroundColor: '#1E293B',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
@@ -271,6 +273,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     minWidth: '48%',
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   infoText: {
     color: '#FFFFFF',
@@ -281,7 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   sectionTitle: {
-    color: '#4A90E2',
+    color: '#2E90FA',
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 12,
@@ -297,10 +301,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#1E3A5F',
+    borderBottomColor: '#1E293B',
   },
   detailLabel: {
-    color: '#7A8B9A',
+    color: '#94A3B8',
     fontSize: 14,
     flex: 1,
   },
@@ -321,7 +325,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listNumber: {
-    color: '#4A90E2',
+    color: '#2E90FA',
     fontSize: 14,
     fontWeight: 'bold',
     width: 20,
@@ -330,10 +334,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0A1628',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#1E3A5F',
+    borderTopColor: '#1E293B',
   },
   enrollButton: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#2E90FA',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -353,11 +357,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    backgroundColor: '#1E3A5F',
+    backgroundColor: '#1E293B',
     borderRadius: 16,
     padding: 24,
     margin: 20,
     width: '90%',
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   modalHeader: {
     alignItems: 'center',
@@ -381,6 +387,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   modalInfoText: {
     color: '#FFFFFF',
@@ -392,7 +400,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cancelButton: {
-    backgroundColor: '#7A8B9A',
+    backgroundColor: '#64748B',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -406,7 +414,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   confirmButton: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#2E90FA',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
