@@ -30,7 +30,7 @@ const CursosPresenciaisStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="CursosPresenciaisMain" component={CursosPresenciaisScreen} />
-      <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+      <Stack.Screen name="CourseDetailScreen" component={CourseDetailScreen} />
     </Stack.Navigator>
   );
 };

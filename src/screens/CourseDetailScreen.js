@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Alert,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,9 +18,28 @@ const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Recebe os dados do curso da navegação
+  // Recebe os dados do curso da navegação com validação
   const curso = route.params?.curso;
+
+  useEffect(() => {
+    // Verifica se os dados do curso foram passados corretamente
+    if (!curso) {
+      Alert.alert(
+        'Erro',
+        'Não foi possível carregar os dados do curso.',
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.goBack()
+          }
+        ]
+      );
+      return;
+    }
+    setIsLoading(false);
+  }, [curso, navigation]);
 
   const handleInscricao = () => {
     setShowModal(true);
@@ -38,6 +58,23 @@ const CourseDetailScreen = () => {
       ]
     );
   };
+
+  // Mostra loading enquanto valida os dados
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2E90FA" />
+          <Text style={styles.loadingText}>Carregando...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Se curso não existe, não renderiza nada (o useEffect já mostrou o erro)
+  if (!curso) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -117,7 +154,7 @@ const CourseDetailScreen = () => {
           {/* Requirements */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Requisitos</Text>
-            {curso.requisitos.map((req, index) => (
+            {curso.requisitos && curso.requisitos.map((req, index) => (
               <View key={index} style={styles.listItem}>
                 <Ionicons name="checkmark-circle-outline" size={16} color="#2E90FA" />
                 <Text style={styles.listText}>{req}</Text>
@@ -128,7 +165,7 @@ const CourseDetailScreen = () => {
           {/* Program */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Programa do Curso</Text>
-            {curso.programa.map((item, index) => (
+            {curso.programa && curso.programa.map((item, index) => (
               <View key={index} style={styles.listItem}>
                 <Text style={styles.listNumber}>{index + 1}.</Text>
                 <Text style={styles.listText}>{item}</Text>
@@ -194,6 +231,17 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     backgroundColor: '#0A1628',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0A1628',
+  },
+  loadingText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginTop: 12,
   },
   header: {
     backgroundColor: '#0A1628',

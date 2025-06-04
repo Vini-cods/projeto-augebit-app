@@ -6,11 +6,12 @@ import {
   StyleSheet,
   SafeAreaView,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import { Video } from 'expo-av';
 import { useFocusEffect } from '@react-navigation/native';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }) => {
   const videoRef = useRef(null);
@@ -47,6 +48,9 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#0A1628" />
+      
+      {/* Logo Video Container */}
       <View style={styles.logoContainer}>
         <Video
           ref={videoRef}
@@ -59,35 +63,57 @@ const WelcomeScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={styles.tabContainer}>
-        <TouchableOpacity style={styles.tabActive} onPress={() => { }}>
-          <Text style={styles.tabTextActive}>Login</Text>
-        </TouchableOpacity>
+      {/* Main Content */}
+      <View style={styles.contentContainer}>
+        {/* Welcome Text */}
+        <View style={styles.welcomeTextContainer}>
+          <Text style={styles.welcomeTitle}>Bem-vindo</Text>
+          <Text style={styles.welcomeSubtitle}>
+            Escolha como você gostaria de acessar sua conta
+          </Text>
+        </View>
 
-        <TouchableOpacity
-          style={styles.tab}
-          onPress={() => navigation.navigate('Register')}
-        >
-          <Text style={styles.tabText}>Cadastro</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Tab Container */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity style={styles.tabActive}>
+            <Text style={styles.tabTextActive}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.tab}
+            onPress={() => navigation.navigate('Register')}
+          >
+            <Text style={styles.tabText}>Cadastro</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.optionsContainer}>
-        <TouchableOpacity
-          style={styles.optionButton}
-          onPress={() => navigation.navigate('LoginForm', { type: 'pessoal' })}
-        >
-          <Text style={styles.optionText}>Pessoal</Text>
-        </TouchableOpacity>
+        {/* Options Container */}
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => navigation.navigate('LoginForm', { type: 'pessoal' })}
+          >
+            <View style={styles.optionContent}>
+              <Text style={styles.optionIcon}>👤</Text>
+              <View style={styles.optionTextContainer}>
+                <Text style={styles.optionTitle}>Pessoal</Text>
+                <Text style={styles.optionSubtitle}>Acesso individual</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.optionButton}
-          onPress={() =>
-            navigation.navigate('LoginForm', { type: 'empresarial' })
-          }
-        >
-          <Text style={styles.optionText}>Empresarial</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => navigation.navigate('LoginForm', { type: 'empresarial' })}
+          >
+            <View style={styles.optionContent}>
+              <Text style={styles.optionIcon}>🏢</Text>
+              <View style={styles.optionTextContainer}>
+                <Text style={styles.optionTitle}>Empresarial</Text>
+                <Text style={styles.optionSubtitle}>Acesso corporativo</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -96,69 +122,111 @@ const WelcomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#091836',
+    backgroundColor: '#0A1628',
   },
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: height * 0.5,
-    marginBottom: 20,
+    height: height * 0.45,
+    paddingTop: 20,
   },
   logoVideo: {
-    width: 650,
-    height: 900,
+    width: 600,
+    height: 500,
     borderRadius: 12,
-    justifyContent: 'center',
-
-
   },
-  logoText: {
+  contentContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+  },
+  welcomeTextContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  welcomeTitle: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 8,
+  },
+  welcomeSubtitle: {
+    color: '#94A3B8',
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 22,
   },
   tabContainer: {
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#2E90FA',
+    backgroundColor: '#1E293B',
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 30,
+    borderWidth: 1,
+    borderColor: '#334155',
   },
   tab: {
     flex: 1,
-    padding: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     alignItems: 'center',
+    borderRadius: 8,
   },
   tabActive: {
     flex: 1,
-    padding: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     alignItems: 'center',
-    borderLeftWidth: 2,
-    borderLeftColor: '#2E90FA',
+    backgroundColor: '#2E90FA',
+    borderRadius: 8,
   },
   tabText: {
-    color: '#FFFFFF',
+    color: '#94A3B8',
     fontSize: 16,
+    fontWeight: '500',
   },
   tabTextActive: {
-    color: '#2E90FA',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  optionsContainer: {
-    padding: 20,
-    gap: 10,
-  },
-  optionButton: {
-    backgroundColor: '#2E90FA',
-    borderRadius: 5,
-    padding: 15,
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  optionText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
+  },
+  optionsContainer: {
+    gap: 15,
+    paddingBottom: 40,
+  },
+  optionButton: {
+    backgroundColor: '#1E293B',
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#334155',
+    elevation: 2,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  optionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  optionIcon: {
+    fontSize: 32,
+    marginRight: 16,
+  },
+  optionTextContainer: {
+    flex: 1,
+  },
+  optionTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  optionSubtitle: {
+    color: '#94A3B8',
+    fontSize: 14,
+    lineHeight: 18,
   },
 });
 
