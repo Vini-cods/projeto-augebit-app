@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -10,19 +10,28 @@ import {
   StatusBar,
   Dimensions,
   Alert,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
 const ProfileScreen = ({ navigation }) => {
-  const [userData] = useState({
-    name: 'Vinícius Santos Briches',
+  const [userData, setUserData] = useState({
+    name: 'Carregando...',
     area: 'Engenheiro de Segurança do Trabalho',
     level: 'Nível Intermediário',
-    joinDate: 'Membro desde Jan 2024',
-    avatar: null, // Pode ser uma URL de imagem
+    joinDate: 'Carregando...',
+    avatar: null,
+    email: '',
+    telefone: '',
+    tipo_conta: 'pessoal'
   });
+
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const userStats = [
     { label: 'Concluídos', value: '12', icon: 'checkmark-circle', color: '#22C55E' },
@@ -85,6 +94,100 @@ const ProfileScreen = ({ navigation }) => {
     { id: 3, type: 'certificate', course: 'Automação Industrial', date: '2 semanas atrás' },
   ];
 
+  // Função para buscar dados do perfil da API
+  const fetchUserProfile = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      
+      if (!token) {
+        Alert.alert('Erro', 'Token de autenticação não encontrado. Faça login novamente.');
+        navigation.navigate('Login'); // Assumindo que você tem uma tela de Login
+        return;
+      }
+
+      const response = await fetch('http://10.136.23.234:3000/api/profile', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const user = result.data;
+        
+        // Formatar data de criação
+        const joinDate = user.created_at 
+          ? `Membro desde ${new Date(user.created_at).toLocaleDateString('pt-BR', { 
+              month: 'short', 
+              year: 'numeric' 
+            })}`
+          : 'Membro desde Jan 2024';
+
+        setUserData({
+          name: user.nome || 'Nome não informado',
+          area: 'Engenheiro de Segurança do Trabalho', // Manter valor padrão ou adicionar campo na API
+          level: user.tipo_conta === 'empresarial' ? 'Nível Empresarial' : 'Nível Intermediário',
+          joinDate: joinDate,
+          avatar: null, // Implementar upload de avatar futuramente
+          email: user.email || '',
+          telefone: user.telefone || '',
+          tipo_conta: user.tipo_conta || 'pessoal'
+        });
+      } else {
+        console.error('Erro ao buscar perfil:', result.error);
+        Alert.alert('Erro', result.error || 'Erro ao carregar perfil');
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+      Alert.alert('Erro', 'Erro de conexão. Verifique sua internet.');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  // Função para refresh pull-to-refresh
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchUserProfile();
+  }, []);
+
+  // Carregar dados ao montar o componente
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  // Função para logout
+  const handleLogout = async () => {
+    Alert.alert(
+      'Sair',
+      'Tem certeza que deseja sair da sua conta?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.removeItem('userToken');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Login' }], // Assumindo que você tem uma tela de Login
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  // Adicionar logout às ações rápidas
+  const quickActionsWithLogout = [
+    ...quickActions,
+    { id: 5, title: 'Sair', icon: 'log-out-outline', onPress: handleLogout },
+  ];
+
   const getActivityIcon = (type) => {
     switch (type) {
       case 'completed': return { icon: 'checkmark-circle', color: '#22C55E' };
@@ -108,6 +211,17 @@ const ProfileScreen = ({ navigation }) => {
 
     return <View style={styles.ratingContainer}>{stars}</View>;
   };
+
+  // Mostrar loading enquanto carrega os dados
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, styles.loadingContainer]}>
+        <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
+        <ActivityIndicator size="large" color="#2E90FA" />
+        <Text style={styles.loadingText}>Carregando perfil...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -139,6 +253,14 @@ const ProfileScreen = ({ navigation }) => {
         style={styles.scrollView} 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#2E90FA']}
+            tintColor="#2E90FA"
+          />
+        }
       >
         {/* Profile Card */}
         <View style={styles.profileCard}>
@@ -164,6 +286,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={styles.levelText}>{userData.level}</Text>
               </View>
               <Text style={styles.joinDate}>{userData.joinDate}</Text>
+              {userData.email && (
+                <Text style={styles.userEmail}>{userData.email}</Text>
+              )}
             </View>
           </View>
 
@@ -185,14 +310,23 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.quickActionsContainer}>
           <Text style={styles.sectionTitle}>Ações Rápidas</Text>
           <View style={styles.quickActionsGrid}>
-            {quickActions.map((action) => (
+            {quickActionsWithLogout.map((action) => (
               <TouchableOpacity 
                 key={action.id} 
                 style={styles.quickActionButton}
                 onPress={action.onPress}
               >
-                <Ionicons name={action.icon} size={24} color="#2E90FA" />
-                <Text style={styles.quickActionText}>{action.title}</Text>
+                <Ionicons 
+                  name={action.icon} 
+                  size={24} 
+                  color={action.title === 'Sair' ? '#EF4444' : '#2E90FA'} 
+                />
+                <Text style={[
+                  styles.quickActionText,
+                  action.title === 'Sair' && { color: '#EF4444' }
+                ]}>
+                  {action.title}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -312,6 +446,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0F172A',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginTop: 16,
   },
   header: {
     flexDirection: 'row',
@@ -442,6 +585,12 @@ const styles = StyleSheet.create({
   joinDate: {
     fontSize: 12,
     color: '#94A3B8',
+    marginBottom: 4,
+  },
+  userEmail: {
+    fontSize: 12,
+    color: '#64748B',
+    fontStyle: 'italic',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -482,20 +631,22 @@ const styles = StyleSheet.create({
   quickActionsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
   quickActionButton: {
     backgroundColor: '#1E293B',
-    width: (width - 60) / 4,
+    width: (width - 80) / 5,
     aspectRatio: 1,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#334155',
+    marginBottom: 8,
   },
   quickActionText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '500',
     textAlign: 'center',
     marginTop: 8,
